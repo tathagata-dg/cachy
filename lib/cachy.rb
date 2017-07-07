@@ -38,6 +38,17 @@ module Cachy
     end
   end
 
+  def self.set *args
+    key = key(*args)
+    options = extract_options!(args)
+
+    set_while_running(key, options)
+
+    result = yield
+    cache_store.write key, result, options
+    result
+  end
+
   def self.get(*args)
     cache_store.read(key(*args))
   end
